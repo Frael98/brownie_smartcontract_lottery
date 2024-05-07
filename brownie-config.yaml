@@ -29,4 +29,4 @@ networks:
 
 dotenv: .env
 wallets:
-  from_key: ${PRIVATE_KEY}
+  from_key: ${PRIVATE_KEY} # Clave de mi wallet MetaMask

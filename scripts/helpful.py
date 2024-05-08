@@ -34,8 +34,8 @@ def get_account(id=None, index=None):
 
 
 def get_contract(contract_name):
-    """Tomar el address de contrato desde brownie config, si esta definido.
-    Caso contrario, despliega Mocks de ese contrato
+    """ Tomar el address de contrato desde brownie config, si esta definido.
+        Caso contrario, despliega Mocks de ese contrato
 
     Args:
         contract_name -> String
@@ -69,3 +69,21 @@ def deploy_mocks():
     linkToken = LinkToken.deploy({ "from": account})
     VRFCoordinatorMock.deploy(linkToken.address, { "from": account})
     print("Mocks desplegados")
+
+def fund_with_link(contract_address, account=None, link_token=None, amount=100000000000000000):
+    """ Funcion que fondea el contrato(Lottery_V1) con Tokens Link pora poder usar el servicio de VRF """
+    """ contract_address: Direccion del contrato
+        account: cuenta que fondea al contrato
+        link_token: contrato del Link Token
+        amount: cantidad de tokens """
+    
+    account = account if account else get_account()
+    link_token = link_token if link_token else get_contract("token_link")
+    # Transferimos la cantidad de tokens al contrato
+    transaccion = link_token.transfer(contract_address, amount, {"from": account})
+    transaccion.wait(1)
+    
+    print("El contrato ha sido fondeado")
+    
+    return transaccion
+    
